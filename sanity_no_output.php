@@ -19,7 +19,7 @@ while ($row = mysql_fetch_row($results))
 {
 	$writeout = "row" . $i % 2;
 	list($hash, $seeders, $leechers, $bytes, $filename) = $row;
-	if (isset($locking) && $locking)
+	if ($locking)
 	{
 		//peercaching ALWAYS on
 		quickQuery("LOCK TABLES ".$prefix."x$hash WRITE, ".$prefix."y$hash WRITE, ".$prefix."summary WRITE");
@@ -115,11 +115,9 @@ while ($row = mysql_fetch_row($results))
 
 function myTrashCollector($hash, $timeout, $now, $writeout)
 {
-	require("config.php");
  	$peers = loadLostPeers($hash, $timeout);
-	for ($i=0; $i < $peers["size"]; $i++) {
+ 	for ($i=0; $i < $peers["size"]; $i++)
 	        killPeer($peers[$i]["peer_id"], $hash, $peers[$i]["bytes"], $peers[$i]);
-	}
  	quickQuery("UPDATE ".$prefix."summary SET lastcycle='$now' WHERE info_hash='$hash'");
 }
 

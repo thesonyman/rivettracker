@@ -33,7 +33,6 @@ else //otherwise, generate new rss.xml file
 	"<description>" . clean($rss_description) . "</description>\n" .
 	"<lastBuildDate>" . date('D, j M Y h:i:s') . " " . $timezone . "</lastBuildDate>\n";
 	
-	$middle_text = "";
 	while ($row = mysql_fetch_row($results))
 	{
 		//figure out full torrent URL

@@ -95,7 +95,10 @@ else
 </tr>
 <?php
 
+if ($GLOBALS["customtitle"] != "true")
 $results = mysql_query("SELECT ".$prefix."summary.info_hash, ".$prefix."namemap.size, ".$prefix."summary.seeds, ".$prefix."summary.leechers, format(".$prefix."summary.finished,0), format(".$prefix."summary.dlbytes/1073741824,3), ".$prefix."namemap.filename FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash ORDER BY ".$prefix."namemap.filename") or die(errorMessage() . "" . mysql_error() . "</p>");
+else $results = mysql_query("SELECT ".$prefix."summary.info_hash, ".$prefix."namemap.size, ".$prefix."summary.seeds, ".$prefix."summary.leechers, format(".$prefix."summary.finished,0), format(".$prefix."summary.dlbytes/1073741824,3), ".$prefix."namemap.title FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash ORDER BY ".$prefix."namemap.title") or die(errorMessage() . "" . mysql_error() . "</p>");
+
 
 $i = 0;
 

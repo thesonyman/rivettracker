@@ -48,10 +48,34 @@ if (!isset($_POST["saveconfig"]))
 	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+2, -2);
 	?>
+	<tr><td>Have exclusive torrents. If checked, the tracker will only accept torrents assigned to this tracker.</td>
+	<td><input type="checkbox" value="<?php if($temp == "true") echo "on"; else echo "off"?>" name="exclusiveannounce"<?php if ($temp == "true") echo " checked";?>></td></tr>
+	<?php
+	$temp = fgets($fr);
+	$temp = substr($temp, strpos($temp, "=")+2, -2);
+	?>
 	<tr><td>Enable or disable scraping by clients.  Generally it is safe to leave this on unless
 	you have a large number of torrents or users which can lead to increased bandwidth usage.  Also, scraping
 	can possibily be used maliciously by abusive clients.</td>
 	<td><input type="checkbox" value="<?php if($temp == "true") echo "on"; else echo "off"?>" name="scrape"<?php if ($temp == "true") echo " checked";?>></td></tr>
+	<?php
+	$temp = fgets($fr);
+	$temp = substr($temp, strpos($temp, "=")+2, -2);
+	?>
+	<tr><td>Displays custom titles on the main torrent statistics page instead of the filename. This is because the uploader script will auto-rename your uploaded filename to exactly what you specified initally or by automatically using the data from the uploaded torrent. Check this if you want the titles to be different from the filename.</td>
+	<td><input type="checkbox" value="<?php if($temp == "true") echo "on"; else echo "off"?>" name="customtitle"<?php if ($temp == "true") echo " checked";?>></td></tr>
+	<?php
+	$temp = fgets($fr);
+	$temp = substr($temp, strpos($temp, "=")+2, -2);
+	?>
+	<tr><td><span class="notice">*</span>Lists the number of torrents on each page on your torrent tracker list. Default is 10.</td>
+	<td><input type="text" name="indexpagelimitspecify" size="40" value="<?php echo $temp;?>"></td></tr>
+	<?php
+	$temp = fgets($fr);
+	$temp = substr($temp, strpos($temp, "=")+2, -2);
+	?>
+	<tr><td><span class="notice">*</span>Lists the number of torrents on each page on the detailed statistics page. Default is 5.</td>
+	<td><input type="text" name="statspagelimitspecify" size="40" value="<?php echo $temp;?>"></td></tr>
 	<?php
 	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+2, -2);
@@ -222,6 +246,32 @@ if (!isset($_POST["saveconfig"]))
 	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+3, -3);
 	?>
+	<tr><td><span class="notice">* </span>Date format of the torrent publication date. It shows on statistics.php. If you change this setting, you will have to change it for every other existing torrent!</td>
+	<td>
+	<select name="dateformat" id="dateformat">
+	<option title="Mon, 4 Jan, 1999 01:15:40 PM" value="D, j M, Y h:i:s A"<?php if($temp == "D, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, 4 Jan, 1999 01:15:40 PM</option>
+	<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="L, j M, Y h:i:s A"<?php if($temp == "L, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 01:15:40 PM</option>
+	<option title="Mon, 4 January, 1999 01:15:40 PM" value="D, j F, Y h:i:s A"<?php if($temp == "D, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, 4 January, 1999 01:15:40 PM</option>
+	<option title="Monday, 4 January, 1999 01:15:40 PM" value="L, j M, Y h:i:s A"<?php if($temp == "L, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 01:15:40 PM</option>
+	<option title="Mon, 4 Jan, 1999 13:15:40" value="D, j M, Y H:i:s"<?php if($temp == "D, j M, Y H:i:s") echo " selected=\"selected\"";?>>Mon, 4 Jan, 1999 13:15:40</option>
+	<option title="Monday, 4 Jan, 1999 13:15:40" value="L, j M, Y H:i:s"<?php if($temp == "L, j M, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 13:15:40</option>
+	<option title="Mon, 4 January, 1999 13:15:40" value="D, j F, Y H:i:s"<?php if($temp == "D, j F, Y H:i:s") echo " selected=\"selected\"";?>>Mon, January 4, 1999 13:15:40</option>
+	<option title="Monday, 4 January, 1999 13:15:40" value="L, j F, Y H:i:s"<?php if($temp == "L, j F, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 13:15:40</option>
+	<option title="Mon, Jan 4, 1999 01:15:40 PM" value="D, M j, Y h:i:s A"<?php if($temp == "D, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, Jan 4, 1999 01:15:40 PM</option>
+	<option title="Monday, Jan 4, 1999 01:15:40 PM" value="L, M j, Y h:i:s A"<?php if($temp == "L, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 01:15:40 PM</option>
+	<option title="Mon, January 4, 1999 01:15:40 PM" value="D, F j, Y h:i:s A"<?php if($temp == "D, F j, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, January 4, 1999 01:15:40 PM</option>
+	<option title="Monday, January 4, 1999 01:15:40 PM" value="L, F j, Y h:i:s A"<?php if($temp == "L,F j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, January 4, 1999 01:15:40 PM</option>
+	<option title="Mon, Jan 4, 1999 13:15:40" value="D, M j, Y H:i:s"<?php if($temp == "D, M j, Y H:i:s") echo " selected=\"selected\"";?>>Mon, Jan 4, 1999 13:15:40</option>
+	<option title="Monday, Jan 4, 1999 13:15:40" value="L, M j, Y H:i:s"<?php if($temp == "L, M j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 13:15:40</option>
+	<option title="Mon, January 4, 1999 13:15:40" value="D, F j, Y H:i:s"<?php if($temp == "D, F j, Y H:i:s") echo " selected=\"selected\"";?>>Mon, January 4, 1999 13:15:40</option>
+	<option title="Monday, January 4, 1999 13:15:40" value="L, F j, Y H:i:s"<?php if($temp == "L, F j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, January 4, 1999 13:15:40</option>
+	</select>
+	</td>
+	</tr>
+	<?php
+	$temp = fgets($fr);
+	$temp = substr($temp, strpos($temp, "=")+3, -3);
+	?>
 	<tr><td><span class="notice">*</span> Timezone that the server runs on</td>
 	<td>
 	<select name="timezone" id="timezone">
@@ -287,6 +337,16 @@ if (!isset($_POST["saveconfig"]))
 if (isset($_POST["saveconfig"]))
 {
 	//check required entries for values, if blank: error out
+	if (!is_numeric($_POST["indexpagelimitspecify"]) || $_POST["indexpagelimitspecify"] == "" || $_POST["indexpagelimitspecify"] <= 0)
+	{
+		echo errorMessage() . "Error: The index page limit is not an integer, a negative number, or is blank.</p>";
+		exit();
+	}	
+	if (!is_numeric($_POST["statspagelimitspecify"]) || $_POST["statspagelimitspecify"] == "" || $_POST["statspagelimitspecify"] <= 0)
+	{
+		echo errorMessage() . "Error: The statistics page limit is not an integer, a negative number, or is blank.</p>";
+		exit();
+	}
 	if (!is_numeric($_POST["report_interval"]) || $_POST["report_interval"] == "" || $_POST["report_interval"] <= 0)
 	{
 		echo errorMessage() . "Error: The maximum reannounce interval is not an integer, a negative number, or is blank.</p>";
@@ -352,6 +412,11 @@ if (isset($_POST["saveconfig"]))
 		echo errorMessage() . "Error: The maximum uploads is not an integer, a negative number, or is blank.</p>";
 		exit();
 	}
+	if ($_POST["dateformat"] == "")
+	{
+		echo errorMessage() . "Error: The date format is blank.</p>";
+		exit();
+	}
 	if ($_POST["timezone"] == "")
 	{
 		echo errorMessage() . "Error: The timezone is blank.</p>";
@@ -384,7 +449,11 @@ if (isset($_POST["saveconfig"]))
 		if (isset($_POST["hiddentracker"]))
 			$hiddentracker = "true";
 		else
-			$hiddentracker = "false";	
+			$hiddentracker = "false";
+		if (isset($_POST["exclusiveannounce"]))
+			$exclusiveannounce = "true";
+		else
+			$exclusiveannounce = "false";
 		if (isset($_POST["enablerss"]))
 			$enablerss = "true";
 		else
@@ -393,6 +462,10 @@ if (isset($_POST["saveconfig"]))
 			$scrape = "true";
 		else
 			$scrape = "false";
+		if (isset($_POST["customtitle"]))
+			$customtitle = "true";
+		else
+			$customtitle = "false";
 		if (isset($_POST["NAT"]))
 			$NAT = "true";
 		else
@@ -415,7 +488,11 @@ if (isset($_POST["saveconfig"]))
 		fwrite($fd, 
 		"<?php //Please do NOT edit this file, use the admin page for changes.\n" .
 		"\$GLOBALS['hiddentracker'] = " . $hiddentracker . ";\n" .
+		"\$GLOBALS['exclusiveannounce'] = " . $exclusiveannounce . ";\n" .
 		"\$GLOBALS['scrape'] = " . $scrape . ";\n" .
+		"\$GLOBALS['customtitle'] = " . $customtitle . ";\n" .
+		"\$GLOBALS['indexpagelimitspecify'] = " . htmlspecialchars($_POST["indexpagelimitspecify"]) . ";\n" .
+		"\$GLOBALS['statspagelimitspecify'] = " . htmlspecialchars($_POST["statspagelimitspecify"]) . ";\n" .
 		"\$GLOBALS['report_interval'] = " . htmlspecialchars($_POST["report_interval"]) . ";\n" .
 		"\$GLOBALS['min_interval'] = " . htmlspecialchars($_POST["min_interval"]) . ";\n" .
 		"\$GLOBALS['maxpeers'] = " . htmlspecialchars($_POST["maxpeers"]) . ";\n" .
@@ -439,6 +516,7 @@ if (isset($_POST["saveconfig"]))
 		"\$website_url = '" . htmlspecialchars($_POST["website_url"]) . "';\n" .
 		"\$GLOBALS['max_upload_rate'] = " . htmlspecialchars($_POST['max_upload_rate']) . ";\n" .
 		"\$GLOBALS['max_uploads'] = " . htmlspecialchars($_POST['max_uploads']) . ";\n" .
+		"\$dateformat = '" . htmlspecialchars($_POST["dateformat"]) . "';\n" .
 		"\$timezone = '" . htmlspecialchars($_POST["timezone"]) . "';\n" .
 		"\$prefix = '" . htmlspecialchars($_POST["prefix"]) . "';\n" .
 		"?>"

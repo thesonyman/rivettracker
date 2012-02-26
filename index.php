@@ -132,11 +132,7 @@ if (file_exists("rss/rss.xml"))
 <tr>
 	<?php
 	//Cleanup page number to prevent XSS
-	if (isset($_GET["page_number"])) {
-		$_GET["page_number"] = htmlspecialchars($_GET["page_number"]);
-	} else {
-		$_GET["page_number"] = "";
-	}
+	$_GET["page_number"] = htmlspecialchars($_GET["page_number"]);
 	$scriptname = htmlspecialchars($scriptname);
 	
 	if (!isset($_GET["activeonly"]))
@@ -214,7 +210,7 @@ while($count < $res)
 	else
 		echo "<a href=\"$scriptname" . "page_number=$page\">$page</a>-\n";
 	$page++;
-	$count = $count + 10;
+	$count = $count + ($GLOBALS['indexpagelimitspecify']);
 }
 echo "</p>\n";
 ?>
@@ -238,15 +234,32 @@ echo "</p>\n";
 	</tr>
 	
 <?php
-if (!isset($_GET["page_number"]))
-	$query = "SELECT ".$prefix."summary.info_hash, ".$prefix."summary.seeds, ".$prefix."summary.leechers, ".$prefix."summary.finished, ".$prefix."summary.dlbytes, ".$prefix."namemap.filename, ".$prefix."namemap.url, ".$prefix."namemap.size, ".$prefix."summary.speed FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT 0,10";
-else
+if ($GLOBALS["customtitle"] != "true")
 {
-	if ($_GET["page_number"] <= 0) //account for possible negative number entry by user
-		$_GET["page_number"] = 1;
-	
-	$page_limit = ($_GET["page_number"] - 1) * 10;
-	$query = "SELECT ".$prefix."summary.info_hash, ".$prefix."summary.seeds, ".$prefix."summary.leechers, ".$prefix."summary.finished, ".$prefix."summary.dlbytes, ".$prefix."namemap.filename, ".$prefix."namemap.url, ".$prefix."namemap.size, ".$prefix."summary.speed FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT $page_limit,10";
+	if (!isset($_GET["page_number"]))
+	$query = "SELECT ".$prefix."summary.info_hash, ".$prefix."summary.seeds, ".$prefix."summary.leechers, ".$prefix."summary.finished, ".$prefix."summary.dlbytes, ".$prefix."namemap.filename, ".$prefix."namemap.url, ".$prefix."namemap.size, ".$prefix."summary.speed FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT 0,${GLOBALS['indexpagelimitspecify']}";
+	else
+	{
+		if ($_GET["page_number"] <= 0) //account for possible negative number entry by user
+			$_GET["page_number"] = 1;
+		
+		$page_limit = ($_GET["page_number"] - 1) * ($GLOBALS['indexpagelimitspecify']);
+		$query = "SELECT ".$prefix."summary.info_hash, ".$prefix."summary.seeds, ".$prefix."summary.leechers, ".$prefix."summary.finished, ".$prefix."summary.dlbytes, ".$prefix."namemap.filename, ".$prefix."namemap.url, ".$prefix."namemap.size, ".$prefix."summary.speed FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT $page_limit,${GLOBALS['indexpagelimitspecify']}";
+	}
+}
+
+if ($GLOBALS["customtitle"] == "true")
+{
+	if (!isset($_GET["page_number"]))
+	$query = "SELECT ".$prefix."summary.info_hash, ".$prefix."summary.seeds, ".$prefix."summary.leechers, ".$prefix."summary.finished, ".$prefix."summary.dlbytes, ".$prefix."namemap.title, ".$prefix."namemap.url, ".$prefix."namemap.size, ".$prefix."summary.speed, ".$prefix."namemap.filename FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.title LIMIT 0,${GLOBALS['indexpagelimitspecify']}";
+	else
+	{
+		if ($_GET["page_number"] <= 0) //account for possible negative number entry by user
+			$_GET["page_number"] = 1;
+		
+		$page_limit = ($_GET["page_number"] - 1) * ($GLOBALS["indexpagelimitspecify"]);
+		$query = "SELECT ".$prefix."summary.info_hash, ".$prefix."summary.seeds, ".$prefix."summary.leechers, ".$prefix."summary.finished, ".$prefix."summary.dlbytes, ".$prefix."namemap.title, ".$prefix."namemap.url, ".$prefix."namemap.size, ".$prefix."summary.speed, ".$prefix."namemap.filename  FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.title LIMIT $page_limit,${GLOBALS['indexpagelimitspecify']}";
+	}
 }
 
 $results = mysql_query($query) or die(errorMessage() . "Can't do SQL query - " . mysql_error() . "</p>");
@@ -257,7 +270,7 @@ while ($data = mysql_fetch_row($results)) {
 	if (is_null($data[5]))
 		$data[5] = $data[0];
 	if (is_null($data[6]))
-		$data[6] = "";
+	$data[6] = "";
 	if (is_null($data[7]))
 		$data[7] = "";
 	if (strlen($data[5]) == 0)
@@ -275,10 +288,23 @@ while ($data = mysql_fetch_row($results)) {
 		echo "<a href=\"${data[6]}\">${data[5]}</a> - ";
 	else
 		echo $data[5] . " - ";
+
+if ($GLOBALS["customtitle"] == "true")
+{
+	if ($hiddentracker == true) //obscure direct link to torrent, use dltorrent.php script
+		echo "<a href=\"dltorrent.php?hash=" . $myhash . "\">  (Download Torrent)</a></td></tr>";
+	else //just display ordinary direct link
+		echo "<a href=\"torrents/" . rawurlencode($data[9]) . ".torrent\">  (Download Torrent)</a></td></tr>";
+}
+
+if ($GLOBALS["customtitle"] != "true")
+{
 	if ($hiddentracker == true) //obscure direct link to torrent, use dltorrent.php script
 		echo "<a href=\"dltorrent.php?hash=" . $myhash . "\">  (Download Torrent)</a></td></tr>";
 	else //just display ordinary direct link
 		echo "<a href=\"torrents/" . rawurlencode($data[5]) . ".torrent\">  (Download Torrent)</a></td></tr>";
+}
+
 	if (strlen($data[7]) > 0) //show file size
 	{
 		echo "<tr><td>&nbsp;</td><td>" . bytesToString($data[7]) . "</td>";
@@ -339,7 +365,11 @@ if ($GLOBALS["countbytes"]) //stop count bytes variable
 ?>
 	</tr></table></td></tr>
 	<tr class="details">
-		<td align="left"><a href="http://www.rivetcode.com">RivetTracker</a> Version: 1.03</td>
+		<td align="left"><a href="http://www.rivetcode.com">RivetTracker </a>
+		<?php
+		include("version.php");
+		?>
+		</td>
 		<?php
 		if (file_exists("legalterms.txt"))
 			echo "<td align=\"right\"><a href=\"legalterms.txt\">Use Policy and Terms of Service</a></td>";

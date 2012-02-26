@@ -29,7 +29,7 @@ if (!$_SESSION['admin_logged_in'])
 
 <?php
 
-if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FILES["zipfile"]["tmp_name"])) //4 corresponds to the error no file uploaded
+if ($_FILES["zipfile"]["error"] != 4 && isset($_FILES["zipfile"]["tmp_name"])) //4 corresponds to the error no file uploaded
 {
 	?>
 	<a href="admin.php"><img src="images/admin.png" border="0" class="icon" alt="Admin Page" title="Admin Page" /></a><a href="admin.php">Return to Admin Page</a>
@@ -64,10 +64,14 @@ if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FIL
 						echo errorMessage() . "Error: The parser was unable to load this torrent.</p>\n";
 						$error_status = false;
 					}
-					if (strtolower($array["announce"]) != $tracker_url)
+					if ($GLOBALS["exclusiveannounce"] == "true")
 					{
-						echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
-						$error_status = false;
+						if (strtolower($array["announce"]) != $tracker_url)
+						{
+							echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
+							$error_status = false;
+						}
+					else ($GLOBALS["exclusiveannounce"] == "false");
 					}
 					if (function_exists("sha1"))
 						$hash = @sha1(BEncode($array["info"]));
@@ -106,7 +110,7 @@ if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FIL
 				
 					if ($error_status == true)
 					{
-						$query = "INSERT INTO " . $prefix . "namemap (info_hash, filename, url, size, pubDate) VALUES (\"$hash\", \"$filename\", \"$url\", \"$total_size\", \"" . date('D, j M Y h:i:s') . "\")";
+						$query = "INSERT INTO " . $prefix . "namemap (info_hash, title, filename, url, size, pubDate) VALUES (\"$hash\", \"$filename\", \"$filename\", \"$url\", \"$total_size\", \"" . date("$dateformat") . "\")";
 						$status = makeTorrent($hash, true);
 						quickQuery($query);
 						if ($status == true)
@@ -160,10 +164,19 @@ else
 	zip file cannot have any folders in it.  This requires that you are running PHP with compiled zip support.
 	If you are unsure, check with your system administrator or phpinfo().  Any torrents that already exist in
 	the database will be skipped.  If you want to use HTTP seeding you'll need to add this feature to the torrent
-	files before you zip and upload the file.  If you are uploading a very large zip file this may take some time...</p>
+	files before you zip and upload the file.  If you are uploading a very large zip file this may take some time...
+	<br>
+	<br>
+	Notes:
+	<br>
+	[1] If you have Exclusive Torrent option enabled, torrents that do not have the absolute path will fail to
+	upload.
+	<br>
+	[2] Even if the custom title option is enabled, the torrents will have the same title as the filename.  You
+	will have to change the titles after the batch upload has finished.</p>
 	
 	<?php
-	if (function_exists("zip_open"))
+	if (function_exists(zip_open))
 	{
 		?>
 		<form enctype="multipart/form-data" action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">

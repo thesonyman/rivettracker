@@ -57,40 +57,24 @@ function addTorrent()
 			echo errorMessage() . "Error: The parser was unable to load your torrent.  Please re-create and re-upload the torrent.</p>\n";
 			endOutput();
 			exit;
-		}
-
-		if (isset($array["announce-list"])) {
-			//multiple trackers are listed
-			$found_tracker = false;
-			for ($i = 0; $i < count($array["announce-list"]); $i++) {
-				if (strtolower($array["announce-list"][$i][0]) == $tracker_url) {
-					$found_tracker = true;
-					break;
-				}
-			}
-			if ($found_tracker == false)
+		}		
+		if ($GLOBALS["exclusiveannounce"] == "true")
+		{
+			if (strtolower($array["announce"]) != $tracker_url)
 			{
-				echo errorMessage() . "Error: Multiple trackers were found but none of them match the
-					announce URL:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
-				endOutput();
-				exit;
-			}
-		} else {
-			//a single tracker is listed
-			if (strtolower($array["announce"]) != $tracker_url) {
 				echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
 				endOutput();
 				exit;
 			}
-		}
-
-		if (isset($_POST["httpseed"]) && $_POST["httpseed"] == "enabled" && $_POST["relative_path"] == "")
+		else ($GLOBALS["exclusiveannounce"] == "false");
+		}		
+		if ($_POST["httpseed"] == "enabled" && $_POST["relative_path"] == "")
 		{
 			echo errorMessage() . "Error: HTTP seeding was checked however no relative path was given.</p>\n";
 			endOutput();
 			exit;
 		}
-		if (isset($_POST["httpseed"]) && $_POST["httpseed"] == "enabled" && $_POST["relative_path"] != "")
+		if ($_POST["httpseed"] == "enabled" && $_POST["relative_path"] != "")
 		{
 			if (Substr($_POST["relative_path"], -1) == "/")
 			{
@@ -111,15 +95,13 @@ function addTorrent()
 				}
 			}
 		}
-		if (isset($_POST["getrightseed"]) && $_POST["getrightseed"] == "enabled" && $_POST["httpftplocation"] == "")
+		if ($_POST["getrightseed"] == "enabled" && $_POST["httpftplocation"] == "")
 		{
 			echo errorMessage() . "Error: GetRight HTTP seeding was checked however no URL was given.</p>\n";
 			endOutput();
 			exit;
 		}
-		if (isset($_POST["getrightseed"]) && $_POST["getrightseed"] == "enabled" &&
-			(Substr($_POST["httpftplocation"], 0, 7) != "http://" && Substr($_POST["httpftplocation"], 0, 6) != "ftp://")
-		)
+		if ($_POST["getrightseed"] == "enabled" && (Substr($_POST["httpftplocation"], 0, 7) != "http://" && Substr($_POST["httpftplocation"], 0, 6) != "ftp://"))
 		{
 			echo errorMessage() . "Error: GetRight HTTP seeding URL must start with http:// or ftp://</p>\n";
 			endOutput();
@@ -138,6 +120,11 @@ function addTorrent()
 	}
 	
 
+	if (isset($_POST["title"]))
+		$title = clean($_POST["title"]);
+	else
+		$title = "";
+		
 	if (isset($_POST["filename"]))
 		$filename = clean($_POST["filename"]);
 	else
@@ -189,7 +176,9 @@ function addTorrent()
 		endOutput();
 	}
 
-	$query = "INSERT INTO ".$prefix."namemap (info_hash, filename, url, size, pubDate) VALUES (\"$hash\", \"$filename\", \"$url\", \"$total_size\", \"" . date('D, j M Y h:i:s') . "\")";
+	if ($GLOBALS["customtitle"] == "true")
+	$query = "INSERT INTO ".$prefix."namemap (info_hash, title, filename, url, size, pubDate) VALUES (\"$hash\", \"$title\", \"$filename\", \"$url\", \"$total_size\", \"" . date("$dateformat") . "\")";
+	else $query = "INSERT INTO ".$prefix."namemap (info_hash, title, filename, url, size, pubDate) VALUES (\"$hash\", \"$filename\", \"$filename\", \"$url\", \"$total_size\", \"" . date("$dateformat") . "\")";
 	$status = makeTorrent($hash, true);
 	quickQuery($query);
 	if ($status)
@@ -235,6 +224,14 @@ function endOutput()
 	<h3>Tracker URL: <?php echo $tracker_url;?></h3>
 	<form enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 	<table>
+	<tr>
+		<?php
+		if ($GLOBALS["customtitle"] == "true")
+		echo "<td class=\"right\">Title:</td>
+		<td class=\"left\"><input type=\"title\" name=\"title\" size=\"50\"/></td>";
+		else ($GLOBALS["customtitle"] != "true");
+		?>
+	</tr>
 	<tr>
 		<td class="right">Torrent file:</td>
 		<td class="left"><?php

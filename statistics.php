@@ -79,16 +79,16 @@ else //display everything
 		else
 			echo "<a href=\"$scriptname" . "page_number=$page\">$page</a>-\n";
 		$page++;
-		$count = $count + 5;
+		$count = $count + ($GLOBALS["statspagelimitspecify"]);
 	}
 	echo "</p>\n";
 	
 	if (!isset($_GET["page_number"]))
-		$query = "SELECT * FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT 0,5";
+		$query = "SELECT * FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT 0,${GLOBALS['statspagelimitspecify']}";
 	else
 	{
-		$page_limit = ($_GET["page_number"] - 1) * 5;
-		$query = "SELECT * FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT $page_limit,5";
+		$page_limit = ($_GET["page_number"] - 1) * ($GLOBALS["statspagelimitspecify"]);
+		$query = "SELECT * FROM ".$prefix."summary LEFT JOIN ".$prefix."namemap ON ".$prefix."summary.info_hash = ".$prefix."namemap.info_hash $where ORDER BY ".$prefix."namemap.filename LIMIT $page_limit,${GLOBALS['statspagelimitspecify']}";
 	}
 }
 
@@ -106,13 +106,13 @@ while ($data = mysql_fetch_row($results))
 	{
 		echo "<hr><table>\n";
 		echo "<tr><th>Info Hash</th><th>Filename</th><th>URL</th><th>File Size</th><th>Publication Date</th></tr>\n";
-		echo "<tr><td>" . $data[0] . "</td><td>" . $data[11] . "</td><td>\n";
-		if (Substr($data[12], 0, 7) == "http://")
-			echo "<a href=\"" . $data[12] . "\">" . $data[12] . "</a>\n";
+		echo "<tr><td>" . $data[0] . "</td><td>" . $data[12] . "</td><td>\n";
+		if (Substr($data[13], 0, 7) == "http://")
+			echo "<a href=\"" . $data[13] . "\">" . $data[13] . "</a>\n";
 		else
-			echo $data[12];
-		echo "</td><td>" . bytesToString($data[13]) . "</td>\n";
-		echo "<td>" . $data[14] . "</td></tr>\n";
+			echo $data[13];
+		echo "</td><td>" . bytesToString($data[14]) . "</td>\n";
+		echo "<td>" . $data[15] . "</td></tr>\n";
 		echo "</table>\n";
 	}
 
@@ -128,7 +128,7 @@ while ($data = mysql_fetch_row($results))
 		$percent_done = 1.00;
 		if ($data2[1] != 0) //only run calculation if they are still downloading
 		{
-			$size_in_bytes = $data[13];
+			$size_in_bytes = $data[14];
 			if ($size_in_bytes == 0) //thou shalt not divide by zero
 				$percent_done = 0;
 			else
@@ -171,7 +171,7 @@ if (!isset($_POST["filename_search"]))
 	else
 		echo "<a href=\"$scriptname" . "page_number=$page\">$page</a>-\n";
 	$page++;
-	$count = $count + 5;
+	$count = $count + ($GLOBALS["statspagelimitspecify"]);
 	}
 	echo "</p>\n";
 }
