@@ -29,7 +29,7 @@ if (!$_SESSION['admin_logged_in'])
 
 <?php
 
-if ($_FILES["zipfile"]["error"] != 4 && isset($_FILES["zipfile"]["tmp_name"])) //4 corresponds to the error no file uploaded
+if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FILES["zipfile"]["tmp_name"])) //4 corresponds to the error no file uploaded
 {
 	?>
 	<a href="admin.php"><img src="images/admin.png" border="0" class="icon" alt="Admin Page" title="Admin Page" /></a><a href="admin.php">Return to Admin Page</a>
@@ -66,13 +66,34 @@ if ($_FILES["zipfile"]["error"] != 4 && isset($_FILES["zipfile"]["tmp_name"])) /
 					}
 					if ($GLOBALS["exclusiveannounce"] == "true")
 					{
+						//a single tracker is listed
 						if (strtolower($array["announce"]) != $tracker_url)
 						{
 							echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
-							$error_status = false;
+							endOutput();
+							exit;
 						}
-					else ($GLOBALS["exclusiveannounce"] == "false");
 					}
+					if ($GLOBALS["exclusiveannounce"] == "false")
+					{
+						if (isset($array["announce-list"])) {
+						//multiple trackers are listed
+						$found_tracker = false;
+						for ($i = 0; $i < count($array["announce-list"]); $i++) {
+							if (strtolower($array["announce-list"][$i][0]) == $tracker_url) {
+								$found_tracker = true;
+								break;
+							}
+						}
+						if ($found_tracker == false)
+						{
+							echo errorMessage() . "Error: Multiple trackers were found but none of them match the
+								announce URL:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
+							endOutput();
+							exit;
+						}
+					}
+				}
 					if (function_exists("sha1"))
 						$hash = @sha1(BEncode($array["info"]));
 					else
@@ -176,7 +197,7 @@ else
 	will have to change the titles after the batch upload has finished.</p>
 	
 	<?php
-	if (function_exists(zip_open))
+	if (function_exists("zip_open"))
 	{
 		?>
 		<form enctype="multipart/form-data" action="<?php echo $_SERVER["PHP_SELF"];?>" method="post">
