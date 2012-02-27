@@ -119,7 +119,7 @@ if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FIL
 					
 					//Validate torrent file, make sure everything is correct
 					$filename = $array["info"]["name"];
-					$filename = mysql_escape_string($filename);
+					$filename = stripslashes($filename);
 					$filename = clean($filename);
 				
 					if ((strlen($hash) != 40) || !verifyHash($hash))

@@ -183,7 +183,7 @@ function addTorrent()
 	
 	//Validate torrent file, make sure everything is correct
 	
-	$filename = mysql_escape_string($filename);
+	$filename = stripslashes($filename);
 	$filename = htmlspecialchars(clean($filename));
 	$url = htmlspecialchars(mysql_escape_string($url));
 
