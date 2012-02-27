@@ -72,15 +72,19 @@ exit;
 	{
 		?>
 		<center>
-		<h1>Check for PHP and MySQL</h1>
+		<h1>RivetTracker Installer</h1>
 		<img src="images/install.png" border="0" class="icon" alt="RivetTracker Installation" title="RivetTracker Installation" />
+		<br>
+		<br>
+		<br>
+		<h2>Check for PHP and MySQL</h2>
 		</center>
 		<form method="post" action="<?php echo $_SERVER["PHP_SELF"];?>">
 		<input type="hidden" name="started" value="1">
 <?php
 
 echo <<<HTML
-<style>table {width: 45%; margin: auto;} th {background: transparent; border: none; align: center;} td.a {width: 25%; text-align: center;} td.c {width: 50px; margin: auto;}</style>
+<style>table {width: 650px; margin: auto;} th {background: transparent; border: none; align: center;} td.a {width: 225px; text-align: center;} td.c {width: 50px; height: 42px; margin: auto;}</style>
 HTML;
 
 // PHP Version
@@ -90,21 +94,21 @@ $_GET['php_version'] = PHP_VERSION;
 if (version_compare(PHP_VERSION, '5.3.0', '>='))
 	{
 echo <<<HTML
-<font face="Verdana" size="3"><br><br><table><tr><th>You have:</th></tr><tr><td class="a">PHP {$_GET['php_version']}</td><td class="b">Your server supports PHP 5.3+.</td><td class="c"><img src="./images/yes.png" class="icon" alt="Supported" /></td></tr></table></font>
+<font face="Verdana" size="3"><br><table><tr><th>PHP Version:</th></tr><tr><td class="a">{$_GET['php_version']}</td><td class="b">Your server supports PHP 5.3+.</td><td class="c"><img src="./images/yes.png" class="icon" alt="Supported" /></td></tr></table></font>
 HTML;
 	}
 	// Check 5.0
 	else if (version_compare(PHP_VERSION, '5.0.0', '>='))
 	{
 echo <<<HTML
-<font face="Verdana" size="3"><br><table><tr><th>You have:</th></tr><tr><td class="a">PHP {$_GET['php_version']}</td><td class="b">Your server supports PHP 5.0+. Update to PHP 5.3 or higher when possible. </td><td class="c"><img src="./images/yes.png" class="icon" alt="Supported" /></td></tr></font>
+<font face="Verdana" size="3"><br><table><tr><th>PHP Version:</th></tr><tr><td class="a">{$_GET['php_version']}</td><td class="b">Your server supports PHP 5.0+. Update to PHP 5.3 or higher when possible. </td><td class="c"><img src="./images/yes.png" class="icon" alt="Supported" /></td></tr></font>
 HTML;
 	}
 	// Does not support PHP 5
 	else if (version_compare(PHP_VERSION, '4.4.9', '<='))
 	{
 echo <<<HTML
-<font face="Verdana" size="3"><table><tr><th>You have:</th></tr><tr><td class="a">PHP {$_GET['php_version']}</td><td class="b">Your server does not support PHP 5. You may have issues running this tracker.</td><td class="c">&nbsp;<img src="./images/no.png" alt="Not Supported" </tr></table></font>
+<font face="Verdana" size="3"><br><table><tr><th>PHP Version:</th></tr><tr><td class="a">{$_GET['php_version']}</td><td class="b">Your server does not support PHP 5. You may have issues running this tracker.</td><td class="c">&nbsp;<img src="./images/no.png" alt="Not Supported" </tr></table></font>
 HTML;
 	}
 
@@ -115,25 +119,24 @@ HTML;
 //MySQL check
 if (class_exists('mysqli') OR function_exists('mysql_connect'))
 {
-	$_GET['mysql_version'] = (class_exists('mysqli') ? mysqli_get_client_info() : mysql_get_client_info());
-	$_GET['mysql_version'] = trim(substr($_GET['mysql_version'], 0, strpos($_GET['mysql_version'], '-')), 'mysqlnd ');
 echo <<<HTML
-<font face="Verdana" size="3"><table><tr><th>You have:</th></tr><tr><td class="a">MySQL {$_GET['mysql_version']}</td><td class="b">Your server supports MySQL.</td><td class="c"><img src="./images/yes.png" class="icon" alt="Supported" /></td></tr></table></font>
+<font face="Verdana" size="3"><table><tr><th>MySQL Support:</th></tr><tr><td class="a">Yes</td><td class="b">Your server supports MySQL.</td><td class="c"><img src="./images/yes.png" class="icon" alt="Supported" /></td></tr></table></font>
 HTML;
 	}
 	// No MySQL
 	else
 	{
 echo <<<HTML
-<font face="Verdana" size="3"><table><tr><th>You have:</tr></th><tr><td class="a">MySQL N/A</td><td class="b">Your server does not support MySQL.</td><td class="c">&nbsp;<img src="./images/no.png" alt="Not Supported" /></td></tr></table></font>
+<font face="Verdana" size="3"><table><tr><th>MySQL Support:</tr></th><tr><td class="a">No</td><td class="b">Your server does not support MySQL.</td><td class="c">&nbsp;<img src="./images/no.png" alt="Not Supported" /></td></tr></table></font>
 HTML;
 	}
 
 echo ("<br><br>");
-		if (!version_compare(PHP_VERSION, '4.4.9', '<=')) echo("<center><font face=\"Verdana\">Fully supported. You may continue.</font></center>");
-		if (version_compare(PHP_VERSION, '4.4.9', '<=')) echo "<center><font face=\"Verdana\">Not fully supported, but you may try.</font></center>";
-		if ((!$_GET['mysql_version'])) die("<center><font face=\"Verdana\">Cannot connect to database. You may not continue.</font></center>");
-		if ((version_compare(PHP_VERSION, '4.4.9', '<=')) && (!$_GET['mysql_version'])) die("<center><font face=\"Verdana\">Not fully supported, also cannot connect to database. You may not continue.</font></center>");
+		if (version_compare(PHP_VERSION, '5.0.0', '>=') && class_exists('mysqli') || version_compare(PHP_VERSION, '5.0.0', '>=') && function_exists('mysql_connect')) echo "<center><font face=\"Verdana\">Fully supported. You may continue.</font></center>";
+		else if (version_compare(PHP_VERSION, '5.0.0', '>=') && !class_exists('mysqli') || version_compare(PHP_VERSION, '5.0.0', '>=') && !function_exists('mysql_connect')) die ("<center><font face=\"Verdana\">Fully supported, but cannot connect to database. You may not continue.</font></center>");
+
+		if (version_compare(PHP_VERSION, '4.4.9', '<=') && class_exists('mysqli') || version_compare(PHP_VERSION, '4.4.9', '<=') && function_exists('mysql_connect')) echo "<center><font face=\"Verdana\">Not fully supported, but you may try.</font></center>";
+		else if (version_compare(PHP_VERSION, '4.4.9', '<=') && !class_exists('mysqli') || version_compare(PHP_VERSION, '4.4.9', '<=') && !function_exists('mysql_connect')) die("<center><font face=\"Verdana\">Not fully supported, also cannot connect to database. You may not continue.</font></center>");
 		?>
 		<br>
 		<br>
