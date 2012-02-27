@@ -310,7 +310,7 @@ if ($GLOBALS["customtitle"] != "true")
 }
 
 	//Magnet link
-	echo "<a href='";
+	echo "&nbsp;<a href='";
 		//https://en.wikipedia.org/wiki/Magnet_URI_scheme
 		//Base-32 encoded SHA1 hash sum
 		echo "magnet:?xt=urn:btih:".$data[0];
@@ -318,7 +318,7 @@ if ($GLOBALS["customtitle"] != "true")
 		echo "&dn=".$data[5];
 		//tracker url
 		echo "&tr=".$website_url . substr($_SERVER['PHP_SELF'], 0, -9) . "announce.php";
-	echo "'> (Magnet";
+	echo "'>(Magnet";
 	echo "<img src='images/magnet-icon.gif' border='0' class='icon' alt='Magnet Link' title='Magnet Link' />";
 	echo ")</a>";
 
@@ -385,7 +385,7 @@ if ($GLOBALS["countbytes"]) //stop count bytes variable
 ?>
 	</tr></table></td></tr>
 	<tr class="details">
-		<td align="left"><a href="http://www.rivetcode.com">RivetTracker </a>
+		<td align="left"><a href="http://www.rivetcode.com">RivetTracker</a>
 		<?php
 		include("version.php");
 		?>
