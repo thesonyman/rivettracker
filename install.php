@@ -421,21 +421,21 @@ echo ("<br><br>");
 		<td>
 		<select name="dateformat" id="dateformat">
 		<option title="Mon, 4 Jan, 1999 01:15:40 PM" value="D, j M, Y h:i:s A" selected="selected">Mon, 4 Jan, 1999 01:15:40 PM</option>
-		<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="L, j M, Y h:i:s A">Monday, 4 Jan, 1999 01:15:40 PM</option>
+		<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="l, j M, Y h:i:s A">Monday, 4 Jan, 1999 01:15:40 PM</option>
 		<option title="Mon, 4 January, 1999 01:15:40 PM" value="D, j F, Y h:i:s A">Mon, 4 January, 1999 01:15:40 PM</option>
-		<option title="Monday, 4 January, 1999 01:15:40 PM" value="L, j F, Y h:i:s A">Monday, 4 January, 1999 01:15:40 PM</option>
+		<option title="Monday, 4 January, 1999 01:15:40 PM" value="l, j F, Y h:i:s A">Monday, 4 January, 1999 01:15:40 PM</option>
 		<option title="Mon, 4 Jan, 1999 13:15:40" value="D, j M, Y H:i:s">Mon, 4 Jan, 1999 13:15:40</option>
-		<option title="Monday, 4 Jan, 1999 13:15:40" value="L, j M, Y H:i:s">Monday, 4 Jan, 1999 13:15:40</option>
+		<option title="Monday, 4 Jan, 1999 13:15:40" value="l, j M, Y H:i:s">Monday, 4 Jan, 1999 13:15:40</option>
 		<option title="Mon, 4 January, 1999 13:15:40" value="D, j F, Y H:i:s">Mon, 4 January, 1999 13:15:40</option>
-		<option title="Monday, 4 January, 1999 13:15:40" value="L, j F, Y H:i:s">Monday, 4 January, 1999 13:15:40</option>
+		<option title="Monday, 4 January, 1999 13:15:40" value="l, j F, Y H:i:s">Monday, 4 January, 1999 13:15:40</option>
 		<option title="Mon, Jan 4, 1999 01:15:40 PM" value="D, M j, Y h:i:s A">Mon, Jan 4, 1999 01:15:40 PM</option>
-		<option title="Monday, Jan 4, 1999 01:15:40 PM" value="L, M j, Y h:i:s A">Monday, Jan 4, 1999 01:15:40 PM</option>
+		<option title="Monday, Jan 4, 1999 01:15:40 PM" value="l, M j, Y h:i:s A">Monday, Jan 4, 1999 01:15:40 PM</option>
 		<option title="Mon, January 4, 1999 01:15:40 PM" value="D, F j, Y h:i:s A">Mon, January 4, 1999 01:15:40 PM</option>
-		<option title="Monday, January 4, 1999 01:15:40 PM" value="L, F j, Y h:i:s A">Monday, January 4, 1999 01:15:40 PM</option>
+		<option title="Monday, January 4, 1999 01:15:40 PM" value="l, F j, Y h:i:s A">Monday, January 4, 1999 01:15:40 PM</option>
 		<option title="Mon, Jan 4, 1999 13:15:40" value="D, M j, Y H:i:s">Mon, Jan 4, 1999 13:15:40</option>
-		<option title="Monday, Jan 4, 1999 13:15:40" value="L, M j, Y H:i:s">Monday, Jan 4, 1999 13:15:40</option>
+		<option title="Monday, Jan 4, 1999 13:15:40" value="l, M j, Y H:i:s">Monday, Jan 4, 1999 13:15:40</option>
 		<option title="Mon, January 4, 1999 13:15:40" value="D, F j, Y H:i:s">Mon, January 4, 1999 13:15:40</option>
-		<option title="Monday, January 4, 1999 13:15:40" value="L, F j, Y H:i:s">Monday, January 4, 1999 13:15:40</option>
+		<option title="Monday, January 4, 1999 13:15:40" value="l, F j, Y H:i:s">Monday, January 4, 1999 13:15:40</option>
 		</select>
 		</td>
 		</tr>

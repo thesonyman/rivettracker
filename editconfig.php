@@ -250,21 +250,21 @@ if (!isset($_POST["saveconfig"]))
 	<td>
 	<select name="dateformat" id="dateformat">
 	<option title="Mon, 4 Jan, 1999 01:15:40 PM" value="D, j M, Y h:i:s A"<?php if($temp == "D, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, 4 Jan, 1999 01:15:40 PM</option>
-	<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="L, j M, Y h:i:s A"<?php if($temp == "L, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 01:15:40 PM</option>
+	<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="l, j M, Y h:i:s A"<?php if($temp == "L, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 01:15:40 PM</option>
 	<option title="Mon, 4 January, 1999 01:15:40 PM" value="D, j F, Y h:i:s A"<?php if($temp == "D, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, 4 January, 1999 01:15:40 PM</option>
-	<option title="Monday, 4 January, 1999 01:15:40 PM" value="L, j M, Y h:i:s A"<?php if($temp == "L, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 01:15:40 PM</option>
+	<option title="Monday, 4 January, 1999 01:15:40 PM" value="l, j M, Y h:i:s A"<?php if($temp == "L, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 01:15:40 PM</option>
 	<option title="Mon, 4 Jan, 1999 13:15:40" value="D, j M, Y H:i:s"<?php if($temp == "D, j M, Y H:i:s") echo " selected=\"selected\"";?>>Mon, 4 Jan, 1999 13:15:40</option>
-	<option title="Monday, 4 Jan, 1999 13:15:40" value="L, j M, Y H:i:s"<?php if($temp == "L, j M, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 13:15:40</option>
+	<option title="Monday, 4 Jan, 1999 13:15:40" value="l, j M, Y H:i:s"<?php if($temp == "L, j M, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 13:15:40</option>
 	<option title="Mon, 4 January, 1999 13:15:40" value="D, j F, Y H:i:s"<?php if($temp == "D, j F, Y H:i:s") echo " selected=\"selected\"";?>>Mon, January 4, 1999 13:15:40</option>
-	<option title="Monday, 4 January, 1999 13:15:40" value="L, j F, Y H:i:s"<?php if($temp == "L, j F, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 13:15:40</option>
+	<option title="Monday, 4 January, 1999 13:15:40" value="l, j F, Y H:i:s"<?php if($temp == "L, j F, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 13:15:40</option>
 	<option title="Mon, Jan 4, 1999 01:15:40 PM" value="D, M j, Y h:i:s A"<?php if($temp == "D, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, Jan 4, 1999 01:15:40 PM</option>
-	<option title="Monday, Jan 4, 1999 01:15:40 PM" value="L, M j, Y h:i:s A"<?php if($temp == "L, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 01:15:40 PM</option>
+	<option title="Monday, Jan 4, 1999 01:15:40 PM" value="l, M j, Y h:i:s A"<?php if($temp == "L, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 01:15:40 PM</option>
 	<option title="Mon, January 4, 1999 01:15:40 PM" value="D, F j, Y h:i:s A"<?php if($temp == "D, F j, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, January 4, 1999 01:15:40 PM</option>
-	<option title="Monday, January 4, 1999 01:15:40 PM" value="L, F j, Y h:i:s A"<?php if($temp == "L,F j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, January 4, 1999 01:15:40 PM</option>
+	<option title="Monday, January 4, 1999 01:15:40 PM" value="l, F j, Y h:i:s A"<?php if($temp == "L,F j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, January 4, 1999 01:15:40 PM</option>
 	<option title="Mon, Jan 4, 1999 13:15:40" value="D, M j, Y H:i:s"<?php if($temp == "D, M j, Y H:i:s") echo " selected=\"selected\"";?>>Mon, Jan 4, 1999 13:15:40</option>
-	<option title="Monday, Jan 4, 1999 13:15:40" value="L, M j, Y H:i:s"<?php if($temp == "L, M j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 13:15:40</option>
+	<option title="Monday, Jan 4, 1999 13:15:40" value="l, M j, Y H:i:s"<?php if($temp == "L, M j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 13:15:40</option>
 	<option title="Mon, January 4, 1999 13:15:40" value="D, F j, Y H:i:s"<?php if($temp == "D, F j, Y H:i:s") echo " selected=\"selected\"";?>>Mon, January 4, 1999 13:15:40</option>
-	<option title="Monday, January 4, 1999 13:15:40" value="L, F j, Y H:i:s"<?php if($temp == "L, F j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, January 4, 1999 13:15:40</option>
+	<option title="Monday, January 4, 1999 13:15:40" value="l, F j, Y H:i:s"<?php if($temp == "L, F j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, January 4, 1999 13:15:40</option>
 	</select>
 	</td>
 	</tr>
