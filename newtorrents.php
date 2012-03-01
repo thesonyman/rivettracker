@@ -58,19 +58,8 @@ function addTorrent()
 			endOutput();
 			exit;
 		}		
-		if ($GLOBALS["exclusiveannounce"] == "true")
-		{
-			//a single tracker is listed
-			if (strtolower($array["announce"]) != $tracker_url)
-			{
-				echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
-				endOutput();
-				exit;
-			}
-		}
-		if ($GLOBALS["exclusiveannounce"] == "false")
-		{
-			if (isset($array["announce-list"])) {
+
+		if (isset($array["announce-list"])) {
 			//multiple trackers are listed
 			$found_tracker = false;
 			for ($i = 0; $i < count($array["announce-list"]); $i++) {
@@ -86,8 +75,14 @@ function addTorrent()
 				endOutput();
 				exit;
 			}
+		} else {
+			//a single tracker is listed
+			if (strtolower($array["announce"]) != $tracker_url) {
+				echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
+				endOutput();
+				exit;
+			}
 		}
-	}
 		
 		if (isset($_POST["httpseed"]) && $_POST["httpseed"] == "enabled" && $_POST["relative_path"] == "")
 		{
