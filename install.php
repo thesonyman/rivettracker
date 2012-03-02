@@ -707,7 +707,7 @@ echo ("<br><br>");
 			<input type="hidden" name="download" value="1">
 			<input type="hidden" name="hiddentracker" value="<?php if (isset($_POST['hiddentracker']) AND $_POST['hiddentracker'] == 'on') echo 'true'; else echo 'false';?>">
 			<input type="hidden" name="scrape" value="<?php if (isset($_POST['scrape']) AND $_POST['scrape'] == 'on') echo 'true'; else echo 'false';?>">
-			<input type="hidden" name="customtitle" value="<?php if (isset($_POST['customtitle']) AND $_POST['customtitle'] == 'on') echo 'true'; else echo 'false';?>">			
+			<input type="hidden" name="customtitle" value="<?php if (isset($_POST['customtitle']) AND $_POST['customtitle'] == 'on') echo 'true'; else echo 'false';?>">
 			<input type="hidden" name="announceurl" value="<?php echo $_POST['announceurl'];?>">
 			<input type="hidden" name="indexpagelimitspecify" value="<?php echo $_POST['indexpagelimitspecify'];?>">
 			<input type="hidden" name="statspagelimitspecify" value="<?php echo $_POST['statspagelimitspecify'];?>">
