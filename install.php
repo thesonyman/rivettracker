@@ -21,6 +21,7 @@ if (isset($_POST["download"]))
 	print "\$GLOBALS['hiddentracker'] = " . htmlspecialchars($_POST["hiddentracker"]) . ";\n";
 	print "\$GLOBALS['scrape'] = " . htmlspecialchars($_POST["scrape"]) . ";\n";
 	print "\$GLOBALS['customtitle'] = " . htmlspecialchars($_POST["customtitle"]) . ";\n";
+	print "\$announceurl = '" . htmlspecialchars($_POST["announceurl"]) . "';\n" .
 	print "\$GLOBALS['indexpagelimitspecify'] = " . htmlspecialchars($_POST["indexpagelimitspecify"]) . ";\n";
 	print "\$GLOBALS['statspagelimitspecify'] = " . htmlspecialchars($_POST["statspagelimitspecify"]) . ";\n";
 	print "\$GLOBALS['report_interval'] = " . htmlspecialchars($_POST["report_interval"]) . ";\n";
@@ -327,8 +328,22 @@ echo ("<br><br>");
 		can possibily be used maliciously by abusive clients.</b></td>
 		<td><input type="checkbox" name="scrape" checked></td></tr>
 
-		<tr><td><b>Displays custom titles on the main torrent statistics page instead of the filename.  This is because the uploader script will auto-rename your uploaded filename to exactly what you specified initally or by automatically using the data from the uploaded torrent.  Check this if you want the titles to be different from the filename.</b></td>
+		<tr><td><b>Displays custom titles on the main torrent statistics page instead of the filename.  This is
+		because the uploader script will auto-rename your uploaded filename to exactly what you specified initally
+		or by automatically using the data from the uploaded torrent.  Check this if you want the titles to be
+		different from the filename.</b></td>
 		<td><input type="checkbox" name="customtitle"></td></tr>
+
+		<tr><td>Short Announce URL: You can enable the short announce feature, making the URL end in /announce for
+		your tracker.  You cannot use both URL forms in one torrent at the same time, and you should not, either.
+		Note: You will need the provided .htaccess file (named .htaccess.dist; rename to .htaccess), have URL rewrite
+		capabilities, and have it properly set up to use this feature.  Otherwise, leave it disabled.</td>
+		<td><select name="announceurl" id="announceurl">
+		<option title="disabled" value="announce.php"<?php if($temp == "announce.php") echo " selected=\"selected\"";?>>disabled</option>
+		<option title="enabled" value="announce"<?php if($temp == "announce") echo " selected=\"selected\"";?>>enabled</option>
+		</select>
+		</td>
+		</tr>
 
 		<tr><td><b><span class="notice">* </span>Lists the number of torrents on each page on your torrent tracker list.  Default is 10.</b></td>
 		<td><input type="text" name="indexpagelimitspecify" size="40" value="10"></td></tr>
@@ -494,6 +509,11 @@ echo ("<br><br>");
 	if (isset($_POST["config"]))
 	{
 		//check required entries for values, if blank: error out
+		if ($_POST["announceurl"] == "")
+		{
+			echo errorMessage() . "Error: The announce URL is blank.</p>";
+			exit();
+		}
 		if (!is_numeric($_POST["indexpagelimitspecify"]) || $_POST["indexpagelimitspecify"] == "" || $_POST["indexpagelimitspecify"] <= 0)
 		{
 			echo errorMessage() . "Error: The index page limit is not an integer, a negative number, or is blank.</p>";
@@ -640,6 +660,7 @@ echo ("<br><br>");
 			"\$GLOBALS['hiddentracker'] = " . $hiddentracker . ";\n" .
 			"\$GLOBALS['scrape'] = " . $scrape . ";\n" .
 			"\$GLOBALS['customtitle'] = " . $customtitle . ";\n" .
+			"\$announceurl = " . htmlspecialchars($_POST["announceurl"]) . ";\n" .
 			"\$GLOBALS['indexpagelimitspecify'] = " . htmlspecialchars($_POST["indexpagelimitspecify"]) . ";\n" .
 			"\$GLOBALS['statspagelimitspecify'] = " . htmlspecialchars($_POST["statspagelimitspecify"]) . ";\n" .
 			"\$GLOBALS['report_interval'] = " . htmlspecialchars($_POST["report_interval"]) . ";\n" .
@@ -687,6 +708,7 @@ echo ("<br><br>");
 			<input type="hidden" name="hiddentracker" value="<?php if (isset($_POST['hiddentracker']) AND $_POST['hiddentracker'] == 'on') echo 'true'; else echo 'false';?>">
 			<input type="hidden" name="scrape" value="<?php if (isset($_POST['scrape']) AND $_POST['scrape'] == 'on') echo 'true'; else echo 'false';?>">
 			<input type="hidden" name="customtitle" value="<?php if (isset($_POST['customtitle']) AND $_POST['customtitle'] == 'on') echo 'true'; else echo 'false';?>">			
+			<input type="hidden" name="announceurl" value="<?php echo $_POST['announceurl'];?>">
 			<input type="hidden" name="indexpagelimitspecify" value="<?php echo $_POST['indexpagelimitspecify'];?>">
 			<input type="hidden" name="statspagelimitspecify" value="<?php echo $_POST['statspagelimitspecify'];?>">
 			<input type="hidden" name="report_interval" value="<?php echo $_POST['report_interval'];?>">

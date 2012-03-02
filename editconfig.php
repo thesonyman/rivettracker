@@ -60,15 +60,26 @@ if (!isset($_POST["saveconfig"]))
 	<td><input type="checkbox" value="<?php if($temp == "true") echo "on"; else echo "off"?>" name="customtitle"<?php if ($temp == "true") echo " checked";?>></td></tr>
 	<?php
 	$temp = fgets($fr);
+	$temp = substr($temp, strpos($temp, "=")+3, -3);
+	?>
+	<tr><td>Short Announce URL: You can turn on the short announce feature, making the URL end in /announce for your tracker. You cannot use both URL forms in one torrent at the same time, and you should not, either. Note: You will need the provided .htaccess file (named .htaccess.dist; rename to .htaccess), have URL rewrite capabilities, and have it properly set up to use this feature. Otherwise, leave it disabled.</td>
+	<td><select name="announceurl" id="announceurl">
+	<option title="disabled" value="announce.php"<?php if($temp == "announce.php") echo " selected=\"selected\"";?>>disabled</option>
+	<option title="enabled" value="announce"<?php if($temp == "announce") echo " selected=\"selected\"";?>>enabled</option>
+	</select>
+	</td>
+	</tr>
+	<?php
+	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+2, -2);
 	?>
-	<tr><td><span class="notice">*</span>Lists the number of torrents on each page on your torrent tracker list. Default is 10.</td>
+	<tr><td><span class="notice">*</span> Lists the number of torrents on each page on your torrent tracker list. Default is 10.</td>
 	<td><input type="text" name="indexpagelimitspecify" size="40" value="<?php echo $temp;?>"></td></tr>
 	<?php
 	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+2, -2);
 	?>
-	<tr><td><span class="notice">*</span>Lists the number of torrents on each page on the detailed statistics page. Default is 5.</td>
+	<tr><td><span class="notice">*</span> Lists the number of torrents on each page on the detailed statistics page. Default is 5.</td>
 	<td><input type="text" name="statspagelimitspecify" size="40" value="<?php echo $temp;?>"></td></tr>
 	<?php
 	$temp = fgets($fr);
@@ -235,30 +246,30 @@ if (!isset($_POST["saveconfig"]))
 	$temp = substr($temp, strpos($temp, "=")+2, -2);
 	?>
 	<tr><td><span class="notice">*</span> For HTTP seeding, this is the maximum number of uploads to run at a time</td>
-	<td><input type="text" name="max_uploads" size="40" value="<?php echo $temp;?>"></td></tr>	
+	<td><input type="text" name="max_uploads" size="40" value="<?php echo $temp;?>"></td></tr>
 	<?php
 	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+3, -3);
 	?>
-	<tr><td><span class="notice">* </span>Date format of the torrent publication date. It shows on statistics.php. If you change this setting, you will have to change it for every other existing torrent!</td>
+	<tr><td><span class="notice">*</span> Date format of the torrent publication date. It shows on statistics.php. If you change this setting, you will have to change it for every other existing torrent!</td>
 	<td>
 	<select name="dateformat" id="dateformat">
 	<option title="Mon, 4 Jan, 1999 01:15:40 PM" value="D, j M, Y h:i:s A"<?php if($temp == "D, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, 4 Jan, 1999 01:15:40 PM</option>
-	<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="l, j M, Y h:i:s A"<?php if($temp == "L, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 01:15:40 PM</option>
+	<option title="Monday, 4 Jan, 1999 01:15:40 PM" value="l, j M, Y h:i:s A"<?php if($temp == "l, j M, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 01:15:40 PM</option>
 	<option title="Mon, 4 January, 1999 01:15:40 PM" value="D, j F, Y h:i:s A"<?php if($temp == "D, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, 4 January, 1999 01:15:40 PM</option>
-	<option title="Monday, 4 January, 1999 01:15:40 PM" value="l, j M, Y h:i:s A"<?php if($temp == "L, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 01:15:40 PM</option>
+	<option title="Monday, 4 January, 1999 01:15:40 PM" value="l, j M, Y h:i:s A"<?php if($temp == "l, j F, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 01:15:40 PM</option>
 	<option title="Mon, 4 Jan, 1999 13:15:40" value="D, j M, Y H:i:s"<?php if($temp == "D, j M, Y H:i:s") echo " selected=\"selected\"";?>>Mon, 4 Jan, 1999 13:15:40</option>
-	<option title="Monday, 4 Jan, 1999 13:15:40" value="l, j M, Y H:i:s"<?php if($temp == "L, j M, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 13:15:40</option>
+	<option title="Monday, 4 Jan, 1999 13:15:40" value="l, j M, Y H:i:s"<?php if($temp == "l, j M, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 Jan, 1999 13:15:40</option>
 	<option title="Mon, 4 January, 1999 13:15:40" value="D, j F, Y H:i:s"<?php if($temp == "D, j F, Y H:i:s") echo " selected=\"selected\"";?>>Mon, January 4, 1999 13:15:40</option>
-	<option title="Monday, 4 January, 1999 13:15:40" value="l, j F, Y H:i:s"<?php if($temp == "L, j F, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 13:15:40</option>
+	<option title="Monday, 4 January, 1999 13:15:40" value="l, j F, Y H:i:s"<?php if($temp == "l, j F, Y H:i:s") echo " selected=\"selected\"";?>>Monday, 4 January, 1999 13:15:40</option>
 	<option title="Mon, Jan 4, 1999 01:15:40 PM" value="D, M j, Y h:i:s A"<?php if($temp == "D, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, Jan 4, 1999 01:15:40 PM</option>
-	<option title="Monday, Jan 4, 1999 01:15:40 PM" value="l, M j, Y h:i:s A"<?php if($temp == "L, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 01:15:40 PM</option>
+	<option title="Monday, Jan 4, 1999 01:15:40 PM" value="l, M j, Y h:i:s A"<?php if($temp == "l, M j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 01:15:40 PM</option>
 	<option title="Mon, January 4, 1999 01:15:40 PM" value="D, F j, Y h:i:s A"<?php if($temp == "D, F j, Y h:i:s A") echo " selected=\"selected\"";?>>Mon, January 4, 1999 01:15:40 PM</option>
-	<option title="Monday, January 4, 1999 01:15:40 PM" value="l, F j, Y h:i:s A"<?php if($temp == "L,F j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, January 4, 1999 01:15:40 PM</option>
+	<option title="Monday, January 4, 1999 01:15:40 PM" value="l, F j, Y h:i:s A"<?php if($temp == "l, F j, Y h:i:s A") echo " selected=\"selected\"";?>>Monday, January 4, 1999 01:15:40 PM</option>
 	<option title="Mon, Jan 4, 1999 13:15:40" value="D, M j, Y H:i:s"<?php if($temp == "D, M j, Y H:i:s") echo " selected=\"selected\"";?>>Mon, Jan 4, 1999 13:15:40</option>
-	<option title="Monday, Jan 4, 1999 13:15:40" value="l, M j, Y H:i:s"<?php if($temp == "L, M j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 13:15:40</option>
+	<option title="Monday, Jan 4, 1999 13:15:40" value="l, M j, Y H:i:s"<?php if($temp == "l, M j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, Jan 4, 1999 13:15:40</option>
 	<option title="Mon, January 4, 1999 13:15:40" value="D, F j, Y H:i:s"<?php if($temp == "D, F j, Y H:i:s") echo " selected=\"selected\"";?>>Mon, January 4, 1999 13:15:40</option>
-	<option title="Monday, January 4, 1999 13:15:40" value="l, F j, Y H:i:s"<?php if($temp == "L, F j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, January 4, 1999 13:15:40</option>
+	<option title="Monday, January 4, 1999 13:15:40" value="l, F j, Y H:i:s"<?php if($temp == "l, F j, Y H:i:s") echo " selected=\"selected\"";?>>Monday, January 4, 1999 13:15:40</option>
 	</select>
 	</td>
 	</tr>
@@ -331,6 +342,11 @@ if (!isset($_POST["saveconfig"]))
 if (isset($_POST["saveconfig"]))
 {
 	//check required entries for values, if blank: error out
+	if ($_POST["announceurl"] == "")
+	{
+		echo errorMessage() . "Error: The announce URL is blank.</p>";
+		exit();
+	}
 	if (!is_numeric($_POST["indexpagelimitspecify"]) || $_POST["indexpagelimitspecify"] == "" || $_POST["indexpagelimitspecify"] <= 0)
 	{
 		echo errorMessage() . "Error: The index page limit is not an integer, a negative number, or is blank.</p>";
@@ -480,6 +496,7 @@ if (isset($_POST["saveconfig"]))
 		"\$GLOBALS['hiddentracker'] = " . $hiddentracker . ";\n" .
 		"\$GLOBALS['scrape'] = " . $scrape . ";\n" .
 		"\$GLOBALS['customtitle'] = " . $customtitle . ";\n" .
+		"\$announceurl = '" . htmlspecialchars($_POST["announceurl"]) . "';\n" .
 		"\$GLOBALS['indexpagelimitspecify'] = " . htmlspecialchars($_POST["indexpagelimitspecify"]) . ";\n" .
 		"\$GLOBALS['statspagelimitspecify'] = " . htmlspecialchars($_POST["statspagelimitspecify"]) . ";\n" .
 		"\$GLOBALS['report_interval'] = " . htmlspecialchars($_POST["report_interval"]) . ";\n" .

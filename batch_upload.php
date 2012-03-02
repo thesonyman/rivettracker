@@ -56,7 +56,7 @@ if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FIL
 					require_once ("BDecode.php");
 					require_once ("BEncode.php");
 					
-					$tracker_url = $website_url . substr($_SERVER['REQUEST_URI'], 0, -16) . "announce.php";
+					$tracker_url = $website_url . substr($_SERVER['REQUEST_URI'], 0, -16) . $announceurl;
 					
 					$array = BDecode($buffer);
 					if (!$array)
@@ -84,7 +84,7 @@ if (isset($_FILES["zipfile"]) && $_FILES["zipfile"]["error"] != 4 && isset($_FIL
 						//a single tracker is listed
 						if (strtolower($array["announce"]) != $tracker_url) {
 							echo errorMessage() . "Error: The tracker announce URL does not match this:<br>$tracker_url<br>Please re-create and re-upload the torrent.</p>\n";
-							endOutput();
+							$error_status = false;
 							exit;
 						}
 					}
@@ -176,6 +176,7 @@ else
 {
 	//display upload box
 	?>
+	<?php require("config.php"); $tracker_url = $website_url . substr($_SERVER['REQUEST_URI'], 0, -16) . $announceurl; ?>
 	<p>This page lets you upload a zip file containing multiple torrents and add them into the database.  The
 	zip file cannot have any folders in it.  This requires that you are running PHP with compiled zip support.
 	If you are unsure, check with your system administrator or phpinfo().  Any torrents that already exist in
@@ -185,11 +186,10 @@ else
 	<br>
 	Notes:
 	<br>
-	[1] If you have Exclusive Torrent option enabled, torrents that do not have the absolute path will fail to
-	upload.
-	<br>
-	[2] Even if the custom title option is enabled, the torrents will have the same title as the filename.  You
-	will have to change the titles after the batch upload has finished.</p>
+	[1] Even if the custom title option is enabled, the torrents will have the same title as the filename.  If you
+	have the custom title option enabled, you may change the titles to your preference after the batch upload has
+	finished.<br>[2] The torrents you are batch uploading should include the following Tracker URL:
+	<b><?php echo $tracker_url ?></b></p>
 	
 	<?php
 	if (function_exists("zip_open"))
