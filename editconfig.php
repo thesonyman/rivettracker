@@ -62,7 +62,7 @@ if (!isset($_POST["saveconfig"]))
 	$temp = fgets($fr);
 	$temp = substr($temp, strpos($temp, "=")+3, -3);
 	?>
-	<tr><td>Short Announce URL: You can turn on the short announce feature, making the URL end in /announce for your tracker. You cannot use both URL forms in one torrent at the same time, and you should not, either. Note: You will need the provided .htaccess file (named .htaccess.dist; rename to .htaccess), have URL rewrite capabilities, and have it properly set up to use this feature. Otherwise, leave it disabled.</td>
+	<tr><td>Short Announce URL: You can turn on the short announce feature, making the URL end in /announce for your tracker. You should not utilize both tracker URL forms in one torrent at the same time, or you will get inconsistent results. Note: You will need the provided htaccess file, have URL rewrite capabilities, and have it properly set up to use this feature. Otherwise, leave it disabled.</td>
 	<td><select name="announceurl" id="announceurl">
 	<option title="disabled" value="announce.php"<?php if($temp == "announce.php") echo " selected=\"selected\"";?>>disabled</option>
 	<option title="enabled" value="announce"<?php if($temp == "announce") echo " selected=\"selected\"";?>>enabled</option>
