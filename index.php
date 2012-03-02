@@ -315,9 +315,11 @@ if ($GLOBALS["customtitle"] != "true")
 		//Base-32 encoded SHA1 hash sum
 		echo "magnet:?xt=urn:btih:".$data[0];
 		//name
-		echo "&dn=".$data[5];
+		if ($GLOBALS["customtitle"] == "true")
+		echo "&dn=".rawurlencode($data[9]);
+		else echo "&dn=".rawurlencode($data[5]);
 		//tracker url
-		echo "&tr=".$website_url . substr($_SERVER['PHP_SELF'], 0, -9) . "announce.php";
+		echo "&tr=".$website_url . substr($_SERVER['PHP_SELF'], 0, -9) . $announceurl;
 	echo "'>(Magnet";
 	echo "<img src='images/magnet-icon.gif' border='0' class='icon' alt='Magnet Link' title='Magnet Link' />";
 	echo ")</a>";
@@ -384,16 +386,20 @@ if ($GLOBALS["countbytes"]) //stop count bytes variable
 
 ?>
 	</tr></table></td></tr>
+<table>
 	<tr class="details">
 		<td align="left"><a href="http://www.rivetcode.com">RivetTracker</a>
 		<?php
-		include("version.php");
+		require("version.php");
+		print($version);
 		?>
 		</td>
+		<td align="right">
 		<?php
 		if (file_exists("legalterms.txt"))
-			echo "<td align=\"right\"><a href=\"legalterms.txt\">Use Policy and Terms of Service</a></td>";
+			echo "<td align=\"right\"><a href=\"legalterms.txt\">Use Policy and Terms of Service</a>";
 		?>
+		</td>
 	</tr>
 </table>
 <a href="./docs/help.html"><img src="images/help.png" border="0" class="icon" alt="Help" title="Help" /></a><a href="./docs/help.html">Help</a>
