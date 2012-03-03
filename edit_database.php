@@ -54,8 +54,8 @@ if (!isset($_POST["editdatabase"]) && !isset($filename))
 	while ($data = mysql_fetch_row($rows))
 	{
 		if ($GLOBALS["customtitle"] == "true")
-		echo "<tr><td><a href=\"" . $PHP_SELF . "?filename=" . rawurlencode($data[1]) . "\">" . $data[0] . "</a></td></tr>\n";
-		else echo "<tr><td><a href=\"" . $PHP_SELF . "?filename=" . rawurlencode($data[0]) . "\">" . $data[0] . "</a></td></tr>\n";
+		echo "<tr><td><a href=\"" . htmlentities($_SERVER['PHP_SELF']) . "?filename=" . rawurlencode($data[1]) . "\">" . $data[0] . "</a></td></tr>\n";
+		else echo "<tr><td><a href=\"" . htmlentities($_SERVER['PHP_SELF']) . "?filename=" . rawurlencode($data[0]) . "\">" . $data[0] . "</a></td></tr>\n";
 	}
 	?>
 	</table>
@@ -69,7 +69,7 @@ if (isset($filename) && !isset($_POST["editdatabase"]))
 	
 	$data = mysql_fetch_row($rows); //should be only one entry...
 	?>
-	<form action="<?php echo $_SERVER["PHP_SELF"];?>" method="POST">
+	<form action="<?php echo htmlentities($_SERVER['PHP_SELF']);?>" method="POST">
 	<input type="hidden" name="editdatabase" value="1">
 	<input type="hidden" name="<?php echo $data[0];?>" value="<?php echo $data[0];?>">
 	<input type="hidden" name="<?php echo $data[0] . "_old_filename";?>" value="<?php echo $data[2];?>">
