@@ -72,11 +72,14 @@ function quickQuery($query)
 	return true;
 }
 
-function hex2bin ($input, $assume_safe=true)
+if(!function_exists('hex2bin'))
 {
-	if ($assume_safe !== true && ! ((strlen($input) % 2) === 0 || preg_match ('/^[0-9a-f]+$/i', $input)))
-		return "";
-	return pack('H*', $input );
+	function hex2bin ($input, $assume_safe=true)
+	{
+		if ($assume_safe !== true && ! ((strlen($input) % 2) === 0 || preg_match ('/^[0-9a-f]+$/i', $input)))
+			return "";
+		return pack('H*', $input );
+	}
 }
 
 // Reports an error to the client in $message.
@@ -356,7 +359,7 @@ function sendRandomPeers($info_hash)
 	{
 		echo (mysql_num_rows($result) * 6) . ":";
 		while ($row = mysql_fetch_row($result))
-            echo str_pad($row[0], 6, chr(32));
+			echo str_pad($row[0], 6, chr(32));
 	}
 	else
 	{
