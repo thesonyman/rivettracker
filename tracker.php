@@ -23,11 +23,22 @@ else
 if (isset ($_SERVER["PATH_INFO"]) )
 {
 	// Scrape interface
+
+// Error: no web browsers allowed
 	if (!isset($_GET["info_hash"]))
 	{
 		header("HTTP/1.0 400 Bad Request");
 		die("This file is for BitTorrent clients.\n");
 	}
+
+// Deny access made with a browser...
+$agent = mysql_real_escape_string($_SERVER["HTTP_USER_AGENT"]);
+
+if (preg_match("/^Mozilla|^Opera|^Links|^Lynx/i", $agent))
+{
+    header("HTTP/1.0 400 Bad Request");
+    die("This file is for BitTorrent clients.\n");
+}
 
 	if (substr($_SERVER["PATH_INFO"],-7) == '/scrape')
 	{
@@ -78,10 +89,9 @@ if (isset ($_SERVER["PATH_INFO"]) )
 			echo "ee";
 			exit();
 		}
-		else {
+		else
 			//client tried scraping but scraping has been disabled by the tracker
 			showError("Scraping has been disabled by this tracker.");
-		}
 	}
 }
 
@@ -96,6 +106,14 @@ if (!isset($_GET["info_hash"]) || !isset($_GET["peer_id"]))
 	header("HTTP/1.0 400 Bad Request");
 	die("This file is for BitTorrent clients.\n");
 }
+$agent = mysql_real_escape_string($_SERVER["HTTP_USER_AGENT"]);
+// Deny access made with a browser...
+
+if (preg_match("/^Mozilla|^Opera|^Links|^Lynx/i", $agent))
+{
+    header("HTTP/1.0 400 Bad Request");
+    die("This file is for BitTorrent clients.\n");
+}
 
 
 $info_hash = bin2hex(clean($_GET["info_hash"]));
@@ -108,35 +126,31 @@ if (!isset($_GET["port"]) || !isset($_GET["downloaded"]) || !isset($_GET["upload
 
 $port = filterInt($_GET["port"]);
 $ip = filterFloat(str_replace("::ffff:", "", $_SERVER["REMOTE_ADDR"]));
-$downloaded = filterInt($_GET["downloaded"]);
-$uploaded = filterInt($_GET["uploaded"]);
+$downloaded = filterFloat($_GET["downloaded"]);
+$uploaded = filterFloat($_GET["uploaded"]);
 $left = filterFloat($_GET["left"]);
 
 
 if (isset($_GET["event"]))
-	$event = filterChar($_GET["event"]);
+	$event = filterData($_GET["event"]);
 else
 	$event = "";
 
 if (!isset($GLOBALS["ip_override"]))
 	$GLOBALS["ip_override"] = true;
 
-if (isset($_GET["numwant"])) {
-	if ($_GET["numwant"] < $GLOBALS["maxpeers"] && $_GET["numwant"] >= 0) {
-		$GLOBALS["maxpeers"] = filterInt($_GET["numwant"]);
-	}
-}
+if (isset($_GET["numwant"]))
+	if ($_GET["numwant"] < $GLOBALS["maxpeers"] && $_GET["numwant"] >= 0)
+		$GLOBALS["maxpeers"] = filterFloat($_GET["numwant"]);
 
 if (isset($_GET["trackerid"]))
 {	
-	if (is_numeric($_GET["trackerid"])) {
-		$GLOBALS["trackerid"] = filterChar($_GET["trackerid"]);
-	}
+	if (is_numeric($_GET["trackerid"]))
+		$GLOBALS["trackerid"] = filterInt($_GET["trackerid"]);
 }
-
-if (!is_numeric($port) || !is_numeric($downloaded) || !is_numeric($uploaded) || !is_numeric($left)) {
+if (!is_numeric($port) || !is_numeric($downloaded) || !is_numeric($uploaded) || !is_numeric($left))
 	showError("Invalid numerical field(s) from client");
-}
+
 
 
 /////////////////////////////////////////////////////
@@ -176,7 +190,7 @@ function start($info_hash, $ip, $port, $peer_id, $left)
 			else
 			{
 				// Finally, we can accept it as a "real" ip address.
-				$ip = mysql_escape_string(trim($address));
+				$ip = mysql_real_escape_string(trim($address));
 				break;
 			}
 		}
@@ -240,7 +254,9 @@ function start($info_hash, $ip, $port, $peer_id, $left)
 		summaryAdd("leechers", 1);
 		return "WHERE natuser='N'";
 	}
-}// End of function start
+}
+
+// End of function start
 
 
 
@@ -259,7 +275,7 @@ if ($event == '')
 	if ($peer_exists["bytes"] != 0 && $left == 0)
 	{
 
-		quickQuery("UPDATE ".$prefix."x$info_hash SET bytes=0, status='seeder' WHERE sequence='${GLOBALS["trackerid"]}");
+		quickQuery("UPDATE ".$prefix."x$info_hash SET bytes=0, status='seeder' WHERE sequence='${GLOBALS["trackerid"]}'");
 		if (mysql_affected_rows() == 1)
 		{
 			summaryAdd("leechers", -1);

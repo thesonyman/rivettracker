@@ -314,6 +314,8 @@ if ($GLOBALS["customtitle"] != "true")
 		//https://en.wikipedia.org/wiki/Magnet_URI_scheme
 		//Base-32 encoded SHA1 hash sum
 		echo "magnet:?xt=urn:btih:".$data[0];
+		//Size in bytes
+		echo "&xl=".$data[7];
 		//name
 		if ($GLOBALS["customtitle"] == "true")
 		echo "&dn=".rawurlencode($data[9]);
