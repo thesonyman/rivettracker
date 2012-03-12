@@ -625,7 +625,49 @@ function filterData($data)
 	$data = trim(htmlentities(strip_tags($data)));
 
 	if (get_magic_quotes_gpc()) {
-		$data = stripslashes($data);
+		return stripslashes($data);
+	}
+
+	$data = mysql_real_escape_string($data);
+
+	return $data;
+}
+
+//generic filter function for character cleaning data
+function filterChar($data)
+{
+	$data = filter_var($data, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+	if (get_magic_quotes_gpc()) {
+		return stripslashes($data);
+	}
+
+	$data = mysql_real_escape_string($data);
+
+	return $data;
+}
+
+//generic filter function for validating integer and hex data
+function filterInt($data)
+{
+	$data = filter_var($data, FILTER_VALIDATE_INT, FILTER_FLAG_ALLOW_HEX);
+
+	if (get_magic_quotes_gpc()) {
+		return stripslashes($data);
+	}
+
+	$data = mysql_real_escape_string($data);
+
+	return $data;
+}
+
+//generic filter function for number cleaning data
+function filterFloat($data)
+{
+	$data = filter_var($data, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+
+	if (get_magic_quotes_gpc()) {
+		return stripslashes($data);
 	}
 
 	$data = mysql_real_escape_string($data);

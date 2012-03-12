@@ -36,11 +36,14 @@ if (isset ($_SERVER["PATH_INFO"]) )
 			$usehash = false;
 			if (isset($_GET["info_hash"]))
 			{
-				$info_hash = htmlspecialchars($_GET['info_hash']);
+				if (get_magic_quotes_gpc())
+					$info_hash = stripslashes(trim(strip_tags($_GET["info_hash"])));
+				else
+					$info_hash = trim(strip_tags($_GET["info_hash"]));
 				if (strlen($info_hash) == 20)
-					$info_hash = bin2hex($info_hash);
+					$info_hash = filterChar(bin2hex($info_hash));
 				else if (strlen($info_hash) == 40)
-					verifyHash($info_hash) or showError("Invalid info hash value.");
+					filterInt(verifyHash($info_hash)) or showError("Invalid info hash value.");
 				else
 					showError("Invalid info hash value.");
 				$usehash = true;
@@ -96,22 +99,22 @@ if (!isset($_GET["info_hash"]) || !isset($_GET["peer_id"]))
 
 
 $info_hash = bin2hex(clean($_GET["info_hash"]));
-$peer_id = bin2hex(filterData($_GET["peer_id"]));
+$peer_id = filterChar(bin2hex($_GET["peer_id"]));
 
 
 if (!isset($_GET["port"]) || !isset($_GET["downloaded"]) || !isset($_GET["uploaded"]) || !isset($_GET["left"])) {
 	showError("Invalid information received from BitTorrent client");
 }
 
-$port = filterData($_GET["port"]);
-$ip = filterData((str_replace("::ffff:", "", $_SERVER["REMOTE_ADDR"])));
-$downloaded = filterData($_GET["downloaded"]);
-$uploaded = filterData($_GET["uploaded"]);
-$left = filterData($_GET["left"]);
+$port = filterInt($_GET["port"]);
+$ip = filterFloat(str_replace("::ffff:", "", $_SERVER["REMOTE_ADDR"]));
+$downloaded = filterInt($_GET["downloaded"]);
+$uploaded = filterInt($_GET["uploaded"]);
+$left = filterFloat($_GET["left"]);
 
 
 if (isset($_GET["event"]))
-	$event = filterData($_GET["event"]);
+	$event = filterChar($_GET["event"]);
 else
 	$event = "";
 
@@ -120,14 +123,14 @@ if (!isset($GLOBALS["ip_override"]))
 
 if (isset($_GET["numwant"])) {
 	if ($_GET["numwant"] < $GLOBALS["maxpeers"] && $_GET["numwant"] >= 0) {
-		$GLOBALS["maxpeers"] = filterData($_GET["numwant"]);
+		$GLOBALS["maxpeers"] = filterInt($_GET["numwant"]);
 	}
 }
 
 if (isset($_GET["trackerid"]))
 {	
 	if (is_numeric($_GET["trackerid"])) {
-		$GLOBALS["trackerid"] = filterData($_GET["trackerid"]);
+		$GLOBALS["trackerid"] = filterChar($_GET["trackerid"]);
 	}
 }
 
@@ -185,7 +188,7 @@ function start($info_hash, $ip, $port, $peer_id, $left)
 		// compact check: valid IP address:
 		if (ip2long($_GET["ip"]) == -1)
 			showError("Invalid IP address. Must be standard dotted decimal (hostnames not allowed)");
-		$ip = filterData($_GET["ip"]);
+		$ip = filterFloat($_GET["ip"]);
 	}
 
 	if ($left == 0)
@@ -222,9 +225,9 @@ function start($info_hash, $ip, $port, $peer_id, $left)
 	}
 	$GLOBALS["trackerid"] = mysql_insert_id();
 
-	$compact = filterData(pack('Nn', ip2long($ip), $port));
-	$peerid = filterData('2:ip' . strlen($ip) . ':' . $ip . '7:peer id20:' . hex2bin($peer_id) . "4:porti{$port}e");
-	$no_peerid = filterData('2:ip' . strlen($ip) . ':' . $ip . "4:porti{$port}e");
+	$compact = mysql_real_escape_string(pack('Nn', ip2long($ip), $port));
+	$peerid = mysql_real_escape_string('2:ip' . strlen($ip) . ':' . $ip . '7:peer id20:' . hex2bin($peer_id) . "4:porti{$port}e");
+	$no_peerid = mysql_real_escape_string('2:ip' . strlen($ip) . ':' . $ip . "4:porti{$port}e");
 	@mysql_query("INSERT INTO ".$prefix."y$info_hash SET sequence='{$GLOBALS["trackerid"]}', compact='$compact', with_peerid='$peerid', without_peerid='$no_peerid'");
 
 	if ($left == 0)
